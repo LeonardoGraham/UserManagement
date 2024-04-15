@@ -1,0 +1,10 @@
+﻿services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=me
+      - POSTGRES_PASSWORD=us3rM@nagement
+      - POSTGRES_DB=users
+    ports:
+      - '5432:5432'
