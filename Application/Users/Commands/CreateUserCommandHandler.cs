@@ -13,15 +13,18 @@ public class CreateUserCommandHandler(
     public async Task<ErrorOr<User>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         // create user
-        var user = new User(
+        var user = User.Create(
             request.FirstName,
             request.LastName,
             request.Email,
             request.DateOfBirth,
             request.UserType);
 
+        if (user.IsError)
+            return user.Errors;
+        
         // Add it to the database
-        await usersRepository.AddUserAsync(user, cancellationToken);
+        await usersRepository.AddUserAsync(user.Value, cancellationToken);
         
         // Commit all repository changes - used when modifying more than 1 repository. 
         await unitOfWork.CommitChangesAsync(cancellationToken);
